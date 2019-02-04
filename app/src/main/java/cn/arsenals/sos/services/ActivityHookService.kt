@@ -56,6 +56,7 @@ class ActivityHookService : Service() {
                     Thread.sleep(5000)
                     val currentActivity = AppUtils.getCurrentActivityName(this)
                     SosLog.d(TAG, "currentActivity is $currentActivity")
+                    AppUtils.requestCurrentActivity(this, 123)
                     Looper.prepare()
                     val builder = AlertDialog.Builder(this)
                     builder.setTitle("showCurrentActivity")

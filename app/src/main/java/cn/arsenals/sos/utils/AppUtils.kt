@@ -3,11 +3,10 @@ package cn.arsenals.sos.utils
 import android.app.ActivityManager
 import android.app.Activity
 import android.app.ActivityManagerNative
+import android.app.ActivityThread
 import android.content.Context
-import android.os.Binder
 import android.os.IBinder
 import android.os.Parcel
-
 
 class AppUtils {
     companion object {
@@ -33,6 +32,29 @@ class AppUtils {
             val ret = ActivityManagerNative.getDefault().asBinder()
                     .transact(IBinder.REQ_CURRENT_ACTIVITY_TRANSACTION/*'`'.toInt() shl 24 or 1*/,
                             data, reply, 0)
+        }
+
+        fun getCurrentServerActivity() : Activity?{
+            val activityThreadClass = Class.forName("android.app.ActivityThread")
+            val activityThread = ActivityThread.currentActivityThread()
+            val activitiesField = activityThreadClass.getDeclaredField("mActivities")
+            activitiesField.setAccessible(true)
+            val activities = activitiesField.get(activityThread) as Map<*, *>
+            for (activityRecord in activities.values) {
+                if (activityRecord == null) {
+                    return null
+                }
+                val activityRecordClass = activityRecord.javaClass
+                val pausedField = activityRecordClass.getDeclaredField("paused")
+                pausedField.isAccessible = true
+                if (!pausedField.getBoolean(activityRecord)) {
+                    val activityField = activityRecordClass.getDeclaredField("activity")
+                    activityField.isAccessible = true
+                    val activity = activityField.get(activityRecord) as Activity
+                    return activity
+                }
+            }
+            return null
         }
     }
 }

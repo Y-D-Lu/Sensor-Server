@@ -11,10 +11,10 @@ public class ActivitySensor {
     }
 
     public void inActivityOperation(Activity activity, int type) {
-        SosLog.e(TAG, "do in-activity operation, activity : " + activity + " type : " + type);
+        SosLog.d(TAG, "do in-activity operation, activity : " + activity + " type : " + type);
         switch (type) {
             default:
-                SosLog.e(TAG, "no specific type " + type + " for activity " + activity);
+                SosLog.w(TAG, "no specific type " + type + " for activity " + activity);
                 break;
         }
     }
