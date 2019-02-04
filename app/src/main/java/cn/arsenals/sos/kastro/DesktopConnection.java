@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
 import android.net.LocalServerSocket;
 import android.net.LocalSocket;

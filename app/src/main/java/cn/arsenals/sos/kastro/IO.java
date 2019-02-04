@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
 import android.system.ErrnoException;
 import android.system.Os;
@@ -7,6 +7,8 @@ import android.system.OsConstants;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+
+import cn.arsenals.sos.BuildConfig;
 
 public class IO {
     private IO() {

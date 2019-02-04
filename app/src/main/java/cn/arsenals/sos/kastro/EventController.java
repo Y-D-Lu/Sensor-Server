@@ -1,6 +1,8 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
-import com.genymobile.scrcpy.wrappers.InputManager;
+import cn.arsenals.sos.core.MagicDisplayMgr;
+import cn.arsenals.sos.util.SosInputUtil;
+import cn.arsenals.sos.util.SosLog;
 
 import android.graphics.Point;
 import android.os.SystemClock;
@@ -14,6 +16,8 @@ import java.io.IOException;
 
 
 public class EventController {
+
+    private static final String TAG = "EventController";
 
     private final Device device;
     private final DesktopConnection connection;
@@ -156,7 +160,9 @@ public class EventController {
     }
 
     private boolean injectEvent(InputEvent event) {
-        return device.injectInputEvent(event, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+        int displayId = MagicDisplayMgr.INSTANCE.getDisplayId();
+        SosLog.d(TAG, "injectInputEvent on display : " + displayId);
+        return SosInputUtil.injectInputEvent(event, displayId, SosInputUtil.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
     private boolean turnScreenOn() {

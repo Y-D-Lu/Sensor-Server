@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
 public final class DisplayInfo {
     private final Size size;

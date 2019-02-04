@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy.wrappers;
+package cn.arsenals.sos.kastro.wrappers;
 
 import android.annotation.SuppressLint;
 import android.os.Build;

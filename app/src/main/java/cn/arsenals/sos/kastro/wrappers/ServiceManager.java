@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy.wrappers;
+package cn.arsenals.sos.kastro.wrappers;
 
 import android.annotation.SuppressLint;
 import android.os.IBinder;
@@ -12,7 +12,6 @@ public final class ServiceManager {
 
     private WindowManager windowManager;
     private DisplayManager displayManager;
-    private InputManager inputManager;
     private PowerManager powerManager;
 
     public ServiceManager() {
@@ -45,13 +44,6 @@ public final class ServiceManager {
             displayManager = new DisplayManager(getService("display", "android.hardware.display.IDisplayManager"));
         }
         return displayManager;
-    }
-
-    public InputManager getInputManager() {
-        if (inputManager == null) {
-            inputManager = new InputManager(getService("input", "android.hardware.input.IInputManager"));
-        }
-        return inputManager;
     }
 
     public PowerManager getPowerManager() {

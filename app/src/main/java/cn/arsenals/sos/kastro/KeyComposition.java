@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
 import java.util.HashMap;
 import java.util.Map;

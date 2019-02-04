@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
 /**
  * Union of all supported event types, identified by their {@code type}.

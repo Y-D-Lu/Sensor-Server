@@ -1,14 +1,14 @@
-package com.genymobile.scrcpy;
-
-import com.genymobile.scrcpy.wrappers.SurfaceControl;
+package cn.arsenals.sos.kastro;
 
 import android.graphics.Rect;
-import android.media.MediaMuxer;
+import android.hardware.display.DisplayManager;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
-import android.os.IBinder;
 import android.view.Surface;
+
+import cn.arsenals.sos.core.MagicDisplayMgr;
+import cn.arsenals.sos.util.SosLog;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -33,6 +33,8 @@ public class ScreenEncoder implements Device.RotationListener {
     private int iFrameInterval;
     private boolean sendFrameMeta;
     private long ptsOrigin;
+
+    private DisplayManager mDisplayManager;
 
     public ScreenEncoder(boolean sendFrameMeta, int bitRate, int frameRate, int iFrameInterval) {
         this.sendFrameMeta = sendFrameMeta;
@@ -61,19 +63,19 @@ public class ScreenEncoder implements Device.RotationListener {
         try {
             do {
                 MediaCodec codec = createCodec();
-                IBinder display = createDisplay();
                 Rect contentRect = device.getScreenInfo().getContentRect();
                 Rect videoRect = device.getScreenInfo().getVideoSize().toRect();
                 setSize(format, videoRect.width(), videoRect.height());
                 configure(codec, format);
                 Surface surface = codec.createInputSurface();
-                setDisplaySurface(display, surface, contentRect, videoRect);
+                MagicDisplayMgr.INSTANCE.createMagicDisplay(contentRect.width(), contentRect.height(), 560, surface);
+                SosLog.d(ScreenEncoder.class.getSimpleName(), "surface : " + surface + "contentRect : " + contentRect + "videoRect : " + videoRect);
                 codec.start();
                 try {
                     alive = encode(codec, fd);
                 } finally {
                     codec.stop();
-                    destroyDisplay(display);
+                    MagicDisplayMgr.INSTANCE.resetMagicDisplay();
                     codec.release();
                     surface.release();
                 }
@@ -150,10 +152,6 @@ public class ScreenEncoder implements Device.RotationListener {
         return format;
     }
 
-    private static IBinder createDisplay() {
-        return SurfaceControl.createDisplay("scrcpy", true);
-    }
-
     private static void configure(MediaCodec codec, MediaFormat format) {
         codec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
     }
@@ -161,20 +159,5 @@ public class ScreenEncoder implements Device.RotationListener {
     private static void setSize(MediaFormat format, int width, int height) {
         format.setInteger(MediaFormat.KEY_WIDTH, width);
         format.setInteger(MediaFormat.KEY_HEIGHT, height);
-    }
-
-    private static void setDisplaySurface(IBinder display, Surface surface, Rect deviceRect, Rect displayRect) {
-        SurfaceControl.openTransaction();
-        try {
-            SurfaceControl.setDisplaySurface(display, surface);
-            SurfaceControl.setDisplayProjection(display, 0, deviceRect, displayRect);
-            SurfaceControl.setDisplayLayerStack(display, 0);
-        } finally {
-            SurfaceControl.closeTransaction();
-        }
-    }
-
-    private static void destroyDisplay(IBinder display) {
-        SurfaceControl.destroyDisplay(display);
     }
 }

@@ -1,4 +1,4 @@
-package com.genymobile.scrcpy.wrappers;
+package cn.arsenals.sos.kastro.wrappers;
 
 import android.os.IInterface;
 import android.view.IRotationWatcher;

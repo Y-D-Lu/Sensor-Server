@@ -1,9 +1,9 @@
-package com.genymobile.scrcpy.wrappers;
-
-import com.genymobile.scrcpy.DisplayInfo;
-import com.genymobile.scrcpy.Size;
+package cn.arsenals.sos.kastro.wrappers;
 
 import android.os.IInterface;
+
+import cn.arsenals.sos.kastro.DisplayInfo;
+import cn.arsenals.sos.kastro.Size;
 
 public final class DisplayManager {
     private final IInterface manager;

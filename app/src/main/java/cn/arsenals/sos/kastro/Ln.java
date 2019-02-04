@@ -1,6 +1,8 @@
-package com.genymobile.scrcpy;
+package cn.arsenals.sos.kastro;
 
 import android.util.Log;
+
+import cn.arsenals.sos.BuildConfig;
 
 /**
  * Log both to Android logger (so that logs are visible in "adb logcat") and standard output/error (so that they are visible in the terminal

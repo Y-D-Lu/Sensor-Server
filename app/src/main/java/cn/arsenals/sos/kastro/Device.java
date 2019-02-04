@@ -1,13 +1,13 @@
-package com.genymobile.scrcpy;
-
-import com.genymobile.scrcpy.wrappers.ServiceManager;
+package cn.arsenals.sos.kastro;
 
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.RemoteException;
 import android.view.IRotationWatcher;
-import android.view.InputEvent;
+
+import cn.arsenals.sos.BuildConfig;
+import cn.arsenals.sos.kastro.wrappers.ServiceManager;
 
 public final class Device {
 
@@ -114,10 +114,6 @@ public final class Device {
 
     public static String getDeviceName() {
         return Build.MODEL;
-    }
-
-    public boolean injectInputEvent(InputEvent inputEvent, int mode) {
-        return serviceManager.getInputManager().injectInputEvent(inputEvent, mode);
     }
 
     public boolean isScreenOn() {
