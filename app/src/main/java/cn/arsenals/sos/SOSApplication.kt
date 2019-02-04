@@ -3,8 +3,6 @@ package cn.arsenals.sos
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.security.KeyStore.getApplicationContext
-
 
 class SOSApplication : Application() {
 

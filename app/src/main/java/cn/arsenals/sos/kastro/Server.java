@@ -2,11 +2,8 @@ package cn.arsenals.sos.kastro;
 
 import android.graphics.Rect;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
-import cn.arsenals.sos.util.SosLog;
 
 public final class Server {
 

@@ -5,7 +5,6 @@ import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.view.Surface
 import cn.arsenals.sos.SOSApplication
-import cn.arsenals.sos.SosConstants
 import cn.arsenals.sos.util.SosLog
 
 object MagicDisplayMgr {
