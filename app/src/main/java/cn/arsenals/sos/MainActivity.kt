@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val activityOptions = ActivityOptions.makeBasic()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activityOptions.launchDisplayId = MagicDisplayMgr.displayId
+            activityOptions.launchDisplayId = MagicDisplayMgr.getMagicDisplayId()
         }
         startActivity(intent, activityOptions.toBundle())
     }
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val activityOptions = ActivityOptions.makeBasic()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activityOptions.launchDisplayId = MagicDisplayMgr.displayId
+            activityOptions.launchDisplayId = MagicDisplayMgr.getMagicDisplayId()
         }
         startActivity(intent, activityOptions.toBundle())
     }

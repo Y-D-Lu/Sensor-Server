@@ -5,8 +5,10 @@ import android.app.Activity
 import android.app.ActivityManagerNative
 import android.app.ActivityThread
 import android.content.Context
+import android.hardware.display.DisplayManager
 import android.os.IBinder
 import android.os.Parcel
+import cn.arsenals.sos.SosConstants
 
 class AppUtils {
     companion object {
@@ -55,6 +57,20 @@ class AppUtils {
                 }
             }
             return null
+        }
+
+        fun getMagicDisplayId(context: Context): Int {
+            val displayManager: DisplayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+            for (display in displayManager.displays) {
+                if (display.name.equals(SosConstants.MagicDisplay.MAGIC_DISPLAY_NAME)) {
+                    return display.displayId
+                }
+            }
+            return 0
+        }
+
+        fun getSystemContext() : Context {
+            return ActivityThread.systemMain().systemContext
         }
     }
 }

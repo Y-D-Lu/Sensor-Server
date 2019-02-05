@@ -7,6 +7,7 @@ import android.view.Surface
 import cn.arsenals.sos.SOSApplication
 import cn.arsenals.sos.SosConstants
 import cn.arsenals.sos.util.SosLog
+import cn.arsenals.sos.utils.AppUtils
 
 object MagicDisplayMgr {
     private const val TAG = "MagicDisplayMgr"
@@ -35,6 +36,13 @@ object MagicDisplayMgr {
     fun getMagicDisplay(): VirtualDisplay? {
         SosLog.d(TAG, "getMagicDisplay : $mMagicDisplay")
         return mMagicDisplay
+    }
+
+    fun getMagicDisplayId(): Int {
+        if (displayId <= 0) {
+            return AppUtils.getMagicDisplayId(SOSApplication.context?:AppUtils.getSystemContext())
+        }
+        return displayId
     }
 
     fun resetMagicDisplay() {
