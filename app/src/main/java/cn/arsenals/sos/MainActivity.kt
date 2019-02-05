@@ -90,8 +90,8 @@ class MainActivity : AppCompatActivity() {
 
     fun onMainBtn4Clicked(view: View) {
         SosLog.d(TAG, "onMainBtn4Clicked")
-        val launcherPkgName = "cn.arsenals.sensor_launcher"
-        val launcherMainActivity = "com.google.android.apps.nexuslauncher.NexusLauncherActivity"
+        val launcherPkgName = SosConstants.SensorLauncher.PACKAGE_NAME
+        val launcherMainActivity = SosConstants.SensorLauncher.LAUNCHER_CLASS_NAME
         val intent = Intent()
         intent.component = ComponentName(launcherPkgName, launcherMainActivity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
