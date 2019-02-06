@@ -2,20 +2,24 @@ package cn.arsenals.sos.kastro;
 
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.display.IDisplayManager;
 import android.os.Build;
+import android.os.IPowerManager;
 import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.view.Display;
 import android.view.IRotationWatcher;
+import android.view.IWindowManager;
 
 import cn.arsenals.sos.BuildConfig;
-import cn.arsenals.sos.kastro.wrappers.ServiceManager;
+import cn.arsenals.sos.util.SosLog;
 
 public final class Device {
+    private static final String TAG = "Device";
 
     public interface RotationListener {
         void onRotationChanged(int rotation);
     }
-
-    private final ServiceManager serviceManager = new ServiceManager();
 
     private ScreenInfo screenInfo;
     private RotationListener rotationListener;
@@ -42,24 +46,33 @@ public final class Device {
     }
 
     private ScreenInfo computeScreenInfo(Rect crop, int maxSize) {
-        DisplayInfo displayInfo = serviceManager.getDisplayManager().getDisplayInfo();
-        boolean rotated = (displayInfo.getRotation() & 1) != 0;
-        Size deviceSize = displayInfo.getSize();
-        Rect contentRect = new Rect(0, 0, deviceSize.getWidth(), deviceSize.getHeight());
-        if (crop != null) {
-            if (rotated) {
-                // the crop (provided by the user) is expressed in the natural orientation
-                crop = flipRect(crop);
+        try {
+            android.view.DisplayInfo info = IDisplayManager.Stub.asInterface(ServiceManager.getService("display")).getDisplayInfo(0);
+            int width = info.logicalWidth;
+            int height = info.logicalHeight;
+            int rotation = info.rotation;
+            DisplayInfo displayInfo = new DisplayInfo(new Size(width, height), rotation);
+            boolean rotated = (displayInfo.getRotation() & 1) != 0;
+            Size deviceSize = displayInfo.getSize();
+            Rect contentRect = new Rect(0, 0, deviceSize.getWidth(), deviceSize.getHeight());
+            if (crop != null) {
+                if (rotated) {
+                    // the crop (provided by the user) is expressed in the natural orientation
+                    crop = flipRect(crop);
+                }
+                if (!contentRect.intersect(crop)) {
+                    // intersect() changes contentRect so that it is intersected with crop
+                    Ln.w("Crop rectangle (" + formatCrop(crop) + ") does not intersect device screen (" + formatCrop(deviceSize.toRect()) + ")");
+                    contentRect = new Rect(); // empty
+                }
             }
-            if (!contentRect.intersect(crop)) {
-                // intersect() changes contentRect so that it is intersected with crop
-                Ln.w("Crop rectangle (" + formatCrop(crop) + ") does not intersect device screen (" + formatCrop(deviceSize.toRect()) + ")");
-                contentRect = new Rect(); // empty
-            }
-        }
 
-        Size videoSize = computeVideoSize(contentRect.width(), contentRect.height(), maxSize);
-        return new ScreenInfo(contentRect, videoSize, rotated);
+            Size videoSize = computeVideoSize(contentRect.width(), contentRect.height(), maxSize);
+            return new ScreenInfo(contentRect, videoSize, rotated);
+        } catch (RemoteException e) {
+            SosLog.e(TAG, "RemoteException : " + e);
+            throw new AssertionError(e);
+        }
     }
 
     private static String formatCrop(Rect rect) {
@@ -117,11 +130,21 @@ public final class Device {
     }
 
     public boolean isScreenOn() {
-        return serviceManager.getPowerManager().isScreenOn();
+        try {
+            return IPowerManager.Stub.asInterface(ServiceManager.getService("power")).isInteractive();
+        } catch (RemoteException e) {
+            SosLog.e(TAG, "RemoteException : " + e);
+            throw new AssertionError(e);
+        }
     }
 
     public void registerRotationWatcher(IRotationWatcher rotationWatcher) {
-        serviceManager.getWindowManager().registerRotationWatcher(rotationWatcher);
+        try {
+            IWindowManager.Stub.asInterface(ServiceManager.getService("window")).watchRotation(rotationWatcher, Display.DEFAULT_DISPLAY);
+        } catch (RemoteException e) {
+            SosLog.e(TAG, "RemoteException : " + e);
+            throw new AssertionError(e);
+        }
     }
 
     public synchronized void setRotationListener(RotationListener rotationListener) {
