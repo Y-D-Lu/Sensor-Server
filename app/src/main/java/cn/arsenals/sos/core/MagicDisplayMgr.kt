@@ -2,7 +2,9 @@ package cn.arsenals.sos.core
 
 import android.content.Context
 import android.hardware.display.DisplayManager
+import android.hardware.display.IDisplayManager
 import android.hardware.display.VirtualDisplay
+import android.os.ServiceManager
 import android.view.Display
 import android.view.Surface
 import cn.arsenals.sos.SOSApplication
@@ -14,9 +16,14 @@ object MagicDisplayMgr {
     private const val TAG = "MagicDisplayMgr"
     var mMagicDisplay: VirtualDisplay? = null
     var displayId = Display.INVALID_DISPLAY;
-    fun createMagicDisplay(width: Int = SosConstants.MagicDisplay.WIDTH,
-                           height: Int = SosConstants.MagicDisplay.HEIGHT,
-                           densityDpi: Int = SosConstants.MagicDisplay.DPI,
+    val displayInfo = IDisplayManager.Stub.asInterface(ServiceManager.getService("display"))
+            .getDisplayInfo(Display.DEFAULT_DISPLAY)
+    val physicalHeight = displayInfo.naturalHeight
+    val physicalWidth = displayInfo.naturalWidth
+    val physicalDpi = displayInfo.logicalDensityDpi
+    fun createMagicDisplay(width: Int = physicalWidth,
+                           height: Int = physicalHeight,
+                           densityDpi: Int = physicalDpi,
                            surface: Surface = Surface(null)): VirtualDisplay {
         if (mMagicDisplay == null) {
             if (existMagicDisplay()) {
@@ -65,7 +72,7 @@ object MagicDisplayMgr {
     fun resetMagicDisplay() {
         val magicDisplay = mMagicDisplay as VirtualDisplay
         magicDisplay.surface = null
-        magicDisplay.resize(SosConstants.MagicDisplay.WIDTH, SosConstants.MagicDisplay.HEIGHT, SosConstants.MagicDisplay.DPI)
+        magicDisplay.resize(physicalWidth, physicalHeight, physicalDpi)
         SosLog.d(TAG, "reset MagicDisplay to default : $magicDisplay")
     }
 
