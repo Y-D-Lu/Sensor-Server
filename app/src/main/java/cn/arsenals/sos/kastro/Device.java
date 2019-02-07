@@ -8,6 +8,7 @@ import android.os.IPowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.view.Display;
+import android.view.DisplayInfo;
 import android.view.IRotationWatcher;
 import android.view.IWindowManager;
 
@@ -47,13 +48,9 @@ public final class Device {
 
     private ScreenInfo computeScreenInfo(Rect crop, int maxSize) {
         try {
-            android.view.DisplayInfo info = IDisplayManager.Stub.asInterface(ServiceManager.getService("display")).getDisplayInfo(0);
-            int width = info.logicalWidth;
-            int height = info.logicalHeight;
-            int rotation = info.rotation;
-            DisplayInfo displayInfo = new DisplayInfo(new Size(width, height), rotation);
-            boolean rotated = (displayInfo.getRotation() & 1) != 0;
-            Size deviceSize = displayInfo.getSize();
+            DisplayInfo displayInfo = IDisplayManager.Stub.asInterface(ServiceManager.getService("display")).getDisplayInfo(0);
+            Size deviceSize = new Size(displayInfo.logicalWidth, displayInfo.logicalHeight);
+            boolean rotated = (displayInfo.rotation & 1) != 0;
             Rect contentRect = new Rect(0, 0, deviceSize.getWidth(), deviceSize.getHeight());
             if (crop != null) {
                 if (rotated) {
