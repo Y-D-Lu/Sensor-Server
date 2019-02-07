@@ -8,6 +8,7 @@ import android.content.Context
 import android.hardware.display.DisplayManager
 import android.os.IBinder
 import android.os.Parcel
+import android.view.Display
 import cn.arsenals.sos.SosConstants
 
 class AppUtils {
@@ -66,7 +67,7 @@ class AppUtils {
                     return display.displayId
                 }
             }
-            return 0
+            return Display.INVALID_DISPLAY
         }
 
         fun getSystemContext() : Context {
