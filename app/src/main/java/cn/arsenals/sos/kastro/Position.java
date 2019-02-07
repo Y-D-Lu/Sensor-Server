@@ -1,28 +1,29 @@
 package cn.arsenals.sos.kastro;
 
 import android.graphics.Point;
+import android.graphics.Rect;
 
 import java.util.Objects;
 
 public class Position {
     private Point point;
-    private Size screenSize;
+    private Rect screenRect;
 
-    public Position(Point point, Size screenSize) {
+    public Position(Point point, Rect screenRect) {
         this.point = point;
-        this.screenSize = screenSize;
+        this.screenRect = screenRect;
     }
 
     public Position(int x, int y, int screenWidth, int screenHeight) {
-        this(new Point(x, y), new Size(screenWidth, screenHeight));
+        this(new Point(x, y), new Rect(0, 0, screenWidth, screenHeight));
     }
 
     public Point getPoint() {
         return point;
     }
 
-    public Size getScreenSize() {
-        return screenSize;
+    public Rect getScreenRect() {
+        return screenRect;
     }
 
     @Override
@@ -35,19 +36,19 @@ public class Position {
         }
         Position position = (Position) o;
         return Objects.equals(point, position.point)
-                && Objects.equals(screenSize, position.screenSize);
+                && Objects.equals(screenRect, position.screenRect);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(point, screenSize);
+        return Objects.hash(point, screenRect);
     }
 
     @Override
     public String toString() {
         return "Position{"
                 + "point=" + point
-                + ", screenSize=" + screenSize
+                + ", screenRect=" + screenRect
                 + '}';
     }
 

@@ -1,5 +1,6 @@
 package cn.arsenals.sos.kastro;
 
+import android.graphics.Rect;
 import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
@@ -54,8 +55,8 @@ public final class DesktopConnection implements Closeable {
         }
 
         DesktopConnection connection = new DesktopConnection(socket);
-        Size videoSize = device.getScreenInfo().getVideoSize();
-        connection.send(Device.getDeviceName(), videoSize.getWidth(), videoSize.getHeight());
+        Rect videoRect = device.getScreenInfo().getVideoRect();
+        connection.send(Device.getDeviceName(), videoRect.width(), videoRect.height());
         return connection;
     }
 

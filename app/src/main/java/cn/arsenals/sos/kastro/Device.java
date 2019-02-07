@@ -49,9 +49,8 @@ public final class Device {
     private ScreenInfo computeScreenInfo(Rect crop, int maxSize) {
         try {
             DisplayInfo displayInfo = IDisplayManager.Stub.asInterface(ServiceManager.getService("display")).getDisplayInfo(0);
-            Size deviceSize = new Size(displayInfo.logicalWidth, displayInfo.logicalHeight);
             boolean rotated = (displayInfo.rotation & 1) != 0;
-            Rect contentRect = new Rect(0, 0, deviceSize.getWidth(), deviceSize.getHeight());
+            Rect contentRect = new Rect(0, 0, displayInfo.logicalWidth, displayInfo.logicalHeight);
             if (crop != null) {
                 if (rotated) {
                     // the crop (provided by the user) is expressed in the natural orientation
@@ -59,13 +58,13 @@ public final class Device {
                 }
                 if (!contentRect.intersect(crop)) {
                     // intersect() changes contentRect so that it is intersected with crop
-                    SosLog.w(TAG, "Crop rectangle (" + formatCrop(crop) + ") does not intersect device screen (" + formatCrop(deviceSize.toRect()) + ")");
+                    SosLog.w(TAG, "Crop rectangle (" + formatCrop(crop) + ") does not intersect device screen (" + formatCrop(contentRect) + ")");
                     contentRect = new Rect(); // empty
                 }
             }
 
-            Size videoSize = computeVideoSize(contentRect.width(), contentRect.height(), maxSize);
-            return new ScreenInfo(contentRect, videoSize, rotated);
+            Rect videoRect = computeVideoRect(contentRect.width(), contentRect.height(), maxSize);
+            return new ScreenInfo(contentRect, videoRect, rotated);
         } catch (RemoteException e) {
             SosLog.e(TAG, "RemoteException : " + e);
             throw new AssertionError(e);
@@ -77,7 +76,7 @@ public final class Device {
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
-    private static Size computeVideoSize(int w, int h, int maxSize) {
+    private static Rect computeVideoRect(int w, int h, int maxSize) {
         // Compute the video size and the padding of the content inside this video.
         // Principle:
         // - scale down the great side of the screen to maxSize (if necessary);
@@ -101,15 +100,15 @@ public final class Device {
             w = portrait ? minor : major;
             h = portrait ? major : minor;
         }
-        return new Size(w, h);
+        return new Rect(0, 0, w, h);
     }
 
     public Point getPhysicalPoint(Position position) {
         // it hides the field on purpose, to read it with a lock
         @SuppressWarnings("checkstyle:HiddenField")
         ScreenInfo screenInfo = getScreenInfo(); // read with synchronization
-        Size videoSize = screenInfo.getVideoSize();
-        Size clientVideoSize = position.getScreenSize();
+        Rect videoSize = screenInfo.getVideoRect();
+        Rect clientVideoSize = position.getScreenRect();
         if (!videoSize.equals(clientVideoSize)) {
             // The client sends a click relative to a video with wrong dimensions,
             // the device may have been rotated since the event was generated, so ignore the event
@@ -117,8 +116,8 @@ public final class Device {
         }
         Rect contentRect = screenInfo.getContentRect();
         Point point = position.getPoint();
-        int scaledX = contentRect.left + point.x * contentRect.width() / videoSize.getWidth();
-        int scaledY = contentRect.top + point.y * contentRect.height() / videoSize.getHeight();
+        int scaledX = contentRect.left + point.x * contentRect.width() / videoSize.width();
+        int scaledY = contentRect.top + point.y * contentRect.height() / videoSize.height();
         return new Point(scaledX, scaledY);
     }
 

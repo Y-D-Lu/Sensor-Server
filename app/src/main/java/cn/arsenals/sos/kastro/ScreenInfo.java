@@ -4,12 +4,12 @@ import android.graphics.Rect;
 
 public final class ScreenInfo {
     private final Rect contentRect; // device size, possibly cropped
-    private final Size videoSize;
+    private final Rect videoRect;
     private final boolean rotated;
 
-    public ScreenInfo(Rect contentRect, Size videoSize, boolean rotated) {
+    public ScreenInfo(Rect contentRect, Rect videoRect, boolean rotated) {
         this.contentRect = contentRect;
-        this.videoSize = videoSize;
+        this.videoRect = videoRect;
         this.rotated = rotated;
     }
 
@@ -17,8 +17,8 @@ public final class ScreenInfo {
         return contentRect;
     }
 
-    public Size getVideoSize() {
-        return videoSize;
+    public Rect getVideoRect() {
+        return videoRect;
     }
 
     public ScreenInfo withRotation(int rotation) {
@@ -26,6 +26,7 @@ public final class ScreenInfo {
         if (rotated == newRotated) {
             return this;
         }
-        return new ScreenInfo(Device.flipRect(contentRect), videoSize.rotate(), newRotated);
+        return new ScreenInfo(Device.flipRect(contentRect),
+                new Rect(0, 0, videoRect.bottom, videoRect.right), newRotated);
     }
 }
