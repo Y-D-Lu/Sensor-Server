@@ -3,6 +3,7 @@ package cn.arsenals.sos.core
 import android.content.Context
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
+import android.view.Display
 import android.view.Surface
 import cn.arsenals.sos.SOSApplication
 import cn.arsenals.sos.SosConstants
@@ -12,9 +13,16 @@ import cn.arsenals.sos.utils.AppUtils
 object MagicDisplayMgr {
     private const val TAG = "MagicDisplayMgr"
     var mMagicDisplay: VirtualDisplay? = null
-    var displayId = 0;
-    fun createMagicDisplay(width: Int, height: Int, densityDpi: Int, surface: Surface): VirtualDisplay {
+    var displayId = Display.INVALID_DISPLAY;
+    fun createMagicDisplay(width: Int = SosConstants.MagicDisplay.WIDTH,
+                           height: Int = SosConstants.MagicDisplay.HEIGHT,
+                           densityDpi: Int = SosConstants.MagicDisplay.DPI,
+                           surface: Surface = Surface(null)): VirtualDisplay {
         if (mMagicDisplay == null) {
+            if (existMagicDisplay()) {
+                SosLog.wtf(TAG, "FATAL!")
+                throw AssertionError()
+            }
             SosLog.d(TAG, "mMagicDisplay == null, SOSApplication.context : " + SOSApplication.context)
             val mDisplayManager = SOSApplication.context?.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
             val magicDisplay = mDisplayManager.createVirtualDisplay(SosConstants.MagicDisplay.MAGIC_DISPLAY_NAME,
@@ -33,13 +41,20 @@ object MagicDisplayMgr {
         }
     }
 
-    fun getMagicDisplay(): VirtualDisplay? {
+    fun existMagicDisplay(): Boolean {
+        if (getMagicDisplayId() < Display.DEFAULT_DISPLAY) {
+            return false
+        }
+        return true
+    }
+
+    fun getMagicDisplay(): VirtualDisplay {
         SosLog.d(TAG, "getMagicDisplay : $mMagicDisplay")
-        return mMagicDisplay
+        return mMagicDisplay ?: createMagicDisplay()
     }
 
     fun getMagicDisplayId(): Int {
-        if (displayId <= 0) {
+        if (displayId < Display.DEFAULT_DISPLAY) {
             displayId = AppUtils.getMagicDisplayId(SOSApplication.context
                     ?: AppUtils.getSystemContext())
             SosLog.w(TAG, "find and set magicDisplayId : $displayId")
