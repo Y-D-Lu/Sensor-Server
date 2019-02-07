@@ -43,7 +43,6 @@ object MagicDisplayMgr {
             displayId = AppUtils.getMagicDisplayId(SOSApplication.context
                     ?: AppUtils.getSystemContext())
             SosLog.w(TAG, "find and set magicDisplayId : $displayId")
-            return displayId
         }
         return displayId
     }
