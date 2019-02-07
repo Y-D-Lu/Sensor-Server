@@ -40,7 +40,10 @@ object MagicDisplayMgr {
 
     fun getMagicDisplayId(): Int {
         if (displayId <= 0) {
-            return AppUtils.getMagicDisplayId(SOSApplication.context?:AppUtils.getSystemContext())
+            displayId = AppUtils.getMagicDisplayId(SOSApplication.context
+                    ?: AppUtils.getSystemContext())
+            SosLog.w(TAG, "find and set magicDisplayId : $displayId")
+            return displayId
         }
         return displayId
     }
