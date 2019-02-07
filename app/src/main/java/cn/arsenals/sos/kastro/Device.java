@@ -48,7 +48,8 @@ public final class Device {
 
     private ScreenInfo computeScreenInfo(Rect crop, int maxSize) {
         try {
-            DisplayInfo displayInfo = IDisplayManager.Stub.asInterface(ServiceManager.getService("display")).getDisplayInfo(0);
+            DisplayInfo displayInfo = IDisplayManager.Stub.asInterface(ServiceManager.getService("display"))
+                    .getDisplayInfo(Display.DEFAULT_DISPLAY);
             boolean rotated = (displayInfo.rotation & 1) != 0;
             Rect contentRect = new Rect(0, 0, displayInfo.logicalWidth, displayInfo.logicalHeight);
             if (crop != null) {
