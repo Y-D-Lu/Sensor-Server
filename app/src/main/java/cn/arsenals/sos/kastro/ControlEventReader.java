@@ -6,7 +6,11 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
+import cn.arsenals.sos.util.SosLog;
+
 public class ControlEventReader {
+
+    private static final String TAG = "ControlEventReader";
 
     private static final int KEYCODE_PAYLOAD_LENGTH = 9;
     private static final int MOUSE_PAYLOAD_LENGTH = 13;
@@ -68,7 +72,7 @@ public class ControlEventReader {
                 controlEvent = parseCommandControlEvent();
                 break;
             default:
-                Ln.w("Unknown event type: " + type);
+                SosLog.w(TAG, "Unknown event type: " + type);
                 controlEvent = null;
                 break;
         }

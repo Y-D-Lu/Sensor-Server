@@ -95,7 +95,7 @@ public class EventController {
 
     private boolean injectChar(char c) {
         String decomposed = KeyComposition.decompose(c);
-        char[] chars = decomposed != null ? decomposed.toCharArray() : new char[] {c};
+        char[] chars = decomposed != null ? decomposed.toCharArray() : new char[]{c};
         KeyEvent[] events = charMap.getEvents(chars);
         if (events == null) {
             return false;
@@ -179,7 +179,7 @@ public class EventController {
             case ControlEvent.COMMAND_BACK_OR_SCREEN_ON:
                 return pressBackOrTurnScreenOn();
             default:
-                Ln.w("Unsupported command: " + action);
+                SosLog.w(TAG, "Unsupported command: " + action);
         }
         return false;
     }

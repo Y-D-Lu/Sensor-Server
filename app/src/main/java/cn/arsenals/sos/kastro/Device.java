@@ -59,7 +59,7 @@ public final class Device {
                 }
                 if (!contentRect.intersect(crop)) {
                     // intersect() changes contentRect so that it is intersected with crop
-                    Ln.w("Crop rectangle (" + formatCrop(crop) + ") does not intersect device screen (" + formatCrop(deviceSize.toRect()) + ")");
+                    SosLog.w(TAG, "Crop rectangle (" + formatCrop(crop) + ") does not intersect device screen (" + formatCrop(deviceSize.toRect()) + ")");
                     contentRect = new Rect(); // empty
                 }
             }

@@ -4,8 +4,12 @@ import android.graphics.Rect;
 
 import java.io.IOException;
 
+import cn.arsenals.sos.util.SosLog;
+
 
 public final class Server {
+
+    private static final String TAG = "Server";
 
     private Server() {
         // not instantiable
@@ -25,7 +29,7 @@ public final class Server {
                 screenEncoder.streamScreen(device, connection.getFd());
             } catch (IOException e) {
                 // this is expected on close
-                Ln.d("Screen streaming stopped");
+                SosLog.d(TAG, "Screen streaming stopped");
             }
         }
     }
@@ -38,7 +42,7 @@ public final class Server {
                     new EventController(device, connection).control();
                 } catch (IOException e) {
                     // this is expected on close
-                    Ln.d("Event controller stopped");
+                    SosLog.d(TAG, "Event controller stopped");
                 }
             }
         }).start();
@@ -90,7 +94,7 @@ public final class Server {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
-                Ln.e("Exception on thread " + t, e);
+                SosLog.e(TAG, "Exception on thread " + t, e);
             }
         });
 
