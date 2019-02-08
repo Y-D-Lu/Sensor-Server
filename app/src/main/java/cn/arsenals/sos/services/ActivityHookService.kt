@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.os.*
+import android.view.Display
 import android.view.WindowManager
 import cn.arsenals.sos.SosConstants
 import cn.arsenals.sos.core.MagicDisplayMgr
@@ -35,11 +36,15 @@ class ActivityHookService : Service() {
                         // wait
                     }
                     val launcherIntent = Intent()
-                    launcherIntent.component = ComponentName(SosConstants.SensorLauncher.PACKAGE_NAME, SosConstants.SensorLauncher.LAUNCHER_CLASS_NAME)
+                    launcherIntent.component = ComponentName(SosConstants.SensorLauncher.PACKAGE_NAME,
+                            SosConstants.SensorLauncher.LAUNCHER_CLASS_NAME)
                     launcherIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     val activityOptions = ActivityOptions.makeBasic()
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         activityOptions.launchDisplayId = MagicDisplayMgr.getMagicDisplayId()
+                    } else {
+                        // if API level < 26, cannot start on magic display. Just mirror cast.
+                        MagicDisplayMgr.displayId = Display.DEFAULT_DISPLAY
                     }
                     startActivity(launcherIntent, activityOptions.toBundle())
                 }
