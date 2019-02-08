@@ -1,11 +1,14 @@
 package cn.arsenals.sos.services
 
+import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
 import android.os.*
 import android.view.WindowManager
 import cn.arsenals.sos.SosConstants
+import cn.arsenals.sos.core.MagicDisplayMgr
 import cn.arsenals.sos.kastro.Server
 import cn.arsenals.sos.util.SosLog
 import cn.arsenals.sos.utils.AppUtils
@@ -18,11 +21,27 @@ class ActivityHookService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val args = intent?.getStringArrayExtra(SosConstants.Broadcast.ARGS)
-        if(args != null){
+        if (args != null) {
             SosLog.d(TAG, "args : " + Arrays.toString(args))
             Thread(Runnable {
                 kotlin.run {
                     Server.main(args)
+                }
+            }).start()
+
+            Thread(Runnable {
+                kotlin.run {
+                    while (!MagicDisplayMgr.existMagicDisplay()) {
+                        // wait
+                    }
+                    val launcherIntent = Intent()
+                    launcherIntent.component = ComponentName(SosConstants.SensorLauncher.PACKAGE_NAME, SosConstants.SensorLauncher.LAUNCHER_CLASS_NAME)
+                    launcherIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    val activityOptions = ActivityOptions.makeBasic()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        activityOptions.launchDisplayId = MagicDisplayMgr.getMagicDisplayId()
+                    }
+                    startActivity(launcherIntent, activityOptions.toBundle())
                 }
             }).start()
         }
