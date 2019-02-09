@@ -1,4 +1,4 @@
-package cn.arsenals.sos.kastro;
+package cn.arsenals.sos.cast;
 
 import cn.arsenals.sos.core.MagicDisplayMgr;
 import cn.arsenals.sos.util.SosInputUtil;

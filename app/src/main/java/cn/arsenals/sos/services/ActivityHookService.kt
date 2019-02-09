@@ -10,7 +10,7 @@ import android.view.Display
 import android.view.WindowManager
 import cn.arsenals.sos.SosConstants
 import cn.arsenals.sos.core.MagicDisplayMgr
-import cn.arsenals.sos.kastro.Server
+import cn.arsenals.sos.cast.Server
 import cn.arsenals.sos.util.SosLog
 import cn.arsenals.sos.utils.AppUtils
 import java.util.*

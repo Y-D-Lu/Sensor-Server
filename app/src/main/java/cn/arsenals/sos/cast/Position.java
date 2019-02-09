@@ -1,4 +1,4 @@
-package cn.arsenals.sos.kastro;
+package cn.arsenals.sos.cast;
 
 import android.graphics.Point;
 import android.graphics.Rect;

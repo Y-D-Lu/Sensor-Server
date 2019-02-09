@@ -24,7 +24,7 @@
             android:process=":ActivityHooker"
             android:exported="false">
         </service>
-        <receiver android:name=".kastro.CastBroadcastReceiver"
+        <receiver android:name=".cast.CastBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="cn.arsenals.sos.kastro.CAST_START" />
