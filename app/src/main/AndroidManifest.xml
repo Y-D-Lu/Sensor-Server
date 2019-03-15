@@ -27,7 +27,7 @@
         <receiver android:name=".cast.CastBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.arsenals.sos.kastro.CAST_START" />
+                <action android:name="cn.arsenals.sos.cast.CAST_START" />
             </intent-filter>
         </receiver>
     </application>
