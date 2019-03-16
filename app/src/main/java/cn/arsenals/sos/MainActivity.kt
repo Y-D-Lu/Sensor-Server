@@ -12,6 +12,7 @@ import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.os.*
 import cn.arsenals.sos.core.MagicDisplayMgr
+import cn.arsenals.sos.wlan.WifiDirectActivity
 import org.jetbrains.anko.toast
 
 
@@ -69,23 +70,14 @@ class MainActivity : AppCompatActivity() {
         SosLog.d(TAG, "onMainBtn2Clicked")
         val mDisplayManager = this.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
         val displays = mDisplayManager.displays
-        for (display in displays){
+        for (display in displays) {
             SosLog.i(TAG, "Display : $display")
         }
     }
 
     fun onMainBtn3Clicked(view: View) {
         SosLog.d(TAG, "onMainBtn3Clicked")
-        val wxPkgName = "com.tencent.mm"
-        val wxMainActivity = "com.tencent.mm.ui.LauncherUI"
-        val intent = Intent()
-        intent.component = ComponentName(wxPkgName, wxMainActivity)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        val activityOptions = ActivityOptions.makeBasic()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activityOptions.launchDisplayId = MagicDisplayMgr.getMagicDisplayId()
-        }
-        startActivity(intent, activityOptions.toBundle())
+        startActivity(Intent(this, WifiDirectActivity::class.java))
     }
 
     fun onMainBtn4Clicked(view: View) {
@@ -102,11 +94,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent, activityOptions.toBundle())
     }
 
-    fun showCurrentActivityAlert(){
+    fun showCurrentActivityAlert() {
         toast("will show after 5s")
         val msg = Message()
         val bd = Bundle()
-        bd.putString("type","onTextViewClicked")
+        bd.putString("type", "onTextViewClicked")
         msg.what = 0
         msg.obj = bd
         ahsMessenger?.send(msg)

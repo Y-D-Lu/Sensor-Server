@@ -2,33 +2,48 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.arsenals.sos"
     android:sharedUserId="android.uid.system">
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".SosApplication"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:fullBackupContent="@xml/backup_descriptor">
+        android:theme="@style/AppTheme">
+
         <uses-library android:name="cn.arsenals.sos" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".services.ActivityHookService"
-            android:process=":ActivityHooker"
-            android:exported="false">
-        </service>
-        <receiver android:name=".cast.CastBroadcastReceiver"
+            android:exported="false"
+            android:process=":ActivityHooker" />
+
+        <receiver
+            android:name="cn.arsenals.sos.cast.CastBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="cn.arsenals.sos.cast.CAST_START" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".wlan.WifiDirectActivity" />
+
     </application>
 </manifest>
