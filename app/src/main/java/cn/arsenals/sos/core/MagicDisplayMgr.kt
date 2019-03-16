@@ -7,7 +7,7 @@ import android.hardware.display.VirtualDisplay
 import android.os.ServiceManager
 import android.view.Display
 import android.view.Surface
-import cn.arsenals.sos.SOSApplication
+import cn.arsenals.sos.SosApplication
 import cn.arsenals.sos.SosConstants
 import cn.arsenals.sos.util.SosLog
 import cn.arsenals.sos.utils.AppUtils
@@ -30,8 +30,8 @@ object MagicDisplayMgr {
                 SosLog.wtf(TAG, "FATAL!")
                 throw AssertionError()
             }
-            SosLog.d(TAG, "mMagicDisplay == null, SOSApplication.context : " + SOSApplication.context)
-            val mDisplayManager = SOSApplication.context?.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+            SosLog.d(TAG, "mMagicDisplay == null, SosApplication.context : " + SosApplication.context)
+            val mDisplayManager = SosApplication.context?.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
             val magicDisplay = mDisplayManager.createVirtualDisplay(SosConstants.MagicDisplay.MAGIC_DISPLAY_NAME,
                     width, height, densityDpi, surface, DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC)
             mMagicDisplay = magicDisplay
@@ -62,7 +62,7 @@ object MagicDisplayMgr {
 
     fun getMagicDisplayId(): Int {
         if (displayId < Display.DEFAULT_DISPLAY) {
-            displayId = AppUtils.getMagicDisplayId(SOSApplication.context
+            displayId = AppUtils.getMagicDisplayId(SosApplication.context
                     ?: AppUtils.getSystemContext())
             SosLog.w(TAG, "find and set magicDisplayId : $displayId")
         }
