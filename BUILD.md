@@ -8,7 +8,7 @@ Sensor-Server is a system app with sharedUserId as _"android.uid.system"_, so we
 We generate the __platform.keystore__ from __platform.pk8__ and __platform.x509.pem__ by the following three steps:
 
     openssl pkcs8 -in platform.pk8 -inform DER -outform PEM -out platform.priv.pem -nocrypt
-    
+
 _and_
 
     openssl pkcs12 -export -in platform.x509.pem -inkey platform.priv.pem -out platform.pk12 -name keyAlias -password pass:tmpPassword
