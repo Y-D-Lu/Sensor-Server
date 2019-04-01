@@ -17,7 +17,7 @@ _then_
 
     keytool -importkeystore -deststorepass storePassword -destkeypass keyPassword -destkeystore platform.keystore -srckeystore platform.pk12 -srcstoretype PKCS12 -srcstorepass tmpPassword -alias keyAlias
 
-~~Replace the keyAlias, keyPassword and storePassword on you own demind~~
+__Replace the keyAlias, keyPassword and storePassword on you own demand__
 
 Finally, you get your own platform.keystore with keyAlias, keyPassword and storePassword.
 
