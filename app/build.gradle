@@ -7,10 +7,13 @@ apply plugin: 'kotlin-android-extensions'
 android {
     signingConfigs {
         SystemSign {
-            keyAlias 'SystemSign'
-            keyPassword 'anthem'
-            storeFile file('F:/SHAMU/sign/platform.keystore')
-            storePassword 'anthem'
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('sign.properties').newDataInputStream())
+
+            keyAlias properties.getProperty('SystemSign.keyAlias')
+            keyPassword properties.getProperty('SystemSign.keyPassword')
+            storeFile file(properties.getProperty('SystemSign.storeFile'))
+            storePassword properties.getProperty('SystemSign.storePassword')
         }
     }
     compileSdkVersion 28
