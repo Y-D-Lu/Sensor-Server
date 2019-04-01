@@ -28,8 +28,7 @@ Devices are connected by Wi-Fi P2P, which makes it possible to keep your own Wi-
 Drag'n'drop to share file to app, such as sending image to wechat friend, referring to [TNT intro on ytb](https://www.youtube.com/watch?v=i9bc2ko-a8k) or [TNT intro on bilibili](https://www.bilibili.com/video/av39075190) from 2:36 to 3:07.
 
 ## How to build
-Refer to [BUILD].
-[BUILD]: BUILD.md
+Refer to [BUILD](BUILD.md).
 
 ## Licence
 
